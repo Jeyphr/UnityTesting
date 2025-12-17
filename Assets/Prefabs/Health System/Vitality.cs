@@ -26,6 +26,7 @@ public class Vitality : MonoBehaviour
         this.canSavingThrow = canSavingThrow;
         this.go = this.gameObject;
 
+        if (logHealthChanges) {onLogDetails?.Invoke($"{go.name} is born!");}
     }
     #endregion
 
@@ -45,6 +46,9 @@ public class Vitality : MonoBehaviour
         if (currentHealth <= 0) { Die(); }
 
         onHealthChanged?.Invoke(currentHealth, maxHealth);
+
+        // Logging
+        if(logHealthChanges) {onLogDetails?.Invoke($"Took {damage} damage. Current Health: {currentHealth}/{maxHealth}");}
     }
 
     private void Heal(int amount)
@@ -54,24 +58,32 @@ public class Vitality : MonoBehaviour
         currentHealth += amount;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         onHealthChanged?.Invoke(currentHealth, maxHealth);
+
+        // Logging
+        if(logHealthChanges) {onLogDetails?.Invoke($"Healed {amount} health. Current Health: {currentHealth}/{maxHealth}");}
     }
     #endregion
 
     private void Die()
     {
-        if (go != null)
-        {
-            onDeath?.Invoke();
-            GameObject.Destroy(go);
-        }
+        if (go == null) {return;}
+
+        onDeath?.Invoke();
+        GameObject.Destroy(go);
+
+        // Logging
+        if(logHealthChanges) {onLogDetails?.Invoke($"{go.name} has died.");}
     }
 
     // ------------------------------------------------------
     #region Delegates & Events
     public delegate void OnHealthChanged(int currentHealth, int maxHealth);
     public event OnHealthChanged onHealthChanged;
-
     public delegate void OnDeath();
     public event OnDeath onDeath;
+    public delegate void LogDetails(string details);
+    public event LogDetails onLogDetails;
+
+    // ------------------------------------------------------
     #endregion
 }

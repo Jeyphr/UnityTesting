@@ -17,16 +17,53 @@ public class Logger : MonoBehaviour
             return _instance;
         }
     }
-    public void Log(string message)
+    // ------------------------------------------------------
+    #region Properties
+    [SerializeField] public bool enableLogging = true;
+
+    // Object References
+    [SerializeField] public Vitality Vitality;
+    [SerializeField] public VitalityUIManager VitalityUIManager;
+    [SerializeField] public InputHandler InputHandler;
+    [SerializeField] public MovementHandler MovementHandler;
+
+    // ------------------------------------------------------
+    // Private Variables
+    private int logCount = 1;
+    #endregion
+
+
+    // ------------------------------------------------------
+    #region Methods
+    private void Log(string message)
     {
-        Debug.Log(message);
-    }
+        if (!enableLogging) return;
+        Debug.Log($"[Log #{logCount}]: {message}");
+        logCount++;
+    }   
+    #endregion
+
 
     // ------------------------------------------------------
     #region Delegates and Events
-    public delegate void LogEventHandler(string message);
-    public event LogEventHandler OnLog;
+    void OnEnable()
+    {
+        if (!enableLogging) return;
+        Log("Logger Enabled.");
+
+        if (Vitality == null) { Debug.LogError("Vitality component is null in Logger"); return; }
+        Vitality.onLogDetails += Log;
+        if (VitalityUIManager == null) { Debug.LogError("VitalityUIManager component is null in Logger"); return; }
+        VitalityUIManager.onLogDetails += Log;
+        if (InputHandler == null) { Debug.LogError("InputHandler component is null in Logger"); return; }
+        InputHandler.onLogDetails += Log;
+        if (MovementHandler == null) { Debug.LogError("MovementHandler component is null in Logger"); return; }
+        MovementHandler.onLogDetails += Log;
+        
+        
+        
+    }
     #endregion
 
-    
+
 }

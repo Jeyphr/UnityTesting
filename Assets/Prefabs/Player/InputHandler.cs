@@ -4,6 +4,8 @@ public class InputHandler : MonoBehaviour
 {
     #region Properties
     //floats
+    //Bools
+    [SerializeField] public bool logInputDetails { get; set; }
 
     #endregion
 
@@ -33,6 +35,7 @@ public class InputHandler : MonoBehaviour
     #region Events and Delegates
     private void OnEnable()
     {
+        if(logInputDetails) {onLogDetails?.Invoke("InputHandler Enabled.");}
         
     }
     private void OnDisable()
@@ -42,6 +45,6 @@ public class InputHandler : MonoBehaviour
     // --------------------------------------
     public delegate void LogDetails(string message);
     public event LogDetails onLogDetails;
-    
+
     #endregion
 }

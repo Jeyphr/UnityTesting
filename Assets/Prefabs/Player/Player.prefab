@@ -1005,7 +1005,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4341095880658900570
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2111,6 +2111,8 @@ GameObject:
   - component: {fileID: 5092449601230253403}
   - component: {fileID: 116621487891434326}
   - component: {fileID: 3487907160125175863}
+  - component: {fileID: 6530478743136908029}
+  - component: {fileID: 811215140451431516}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -2173,6 +2175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec2c3f8912312444880609af77bc0d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Vitality
+  maxHealth: 100
+  currentHealth: 95
   logHealthChanges: 0
 --- !u!114 &3487907160125175863
 MonoBehaviour:
@@ -2188,7 +2192,44 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::VitalityUIManager
   vitality: {fileID: 116621487891434326}
   barFill: {fileID: 2854153944314959387}
+  background: {fileID: 4890431162836153372}
   label: {fileID: 6836359861016210550}
+  logHealthUIChanges: 0
+--- !u!114 &6530478743136908029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4423710024287696707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e14035a623d56d4fa95d4af0f5f46e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MovementHandler
+  playerController: {fileID: 5092449601230253403}
+  playerCamera: {fileID: 1399628655916104719}
+  inputHandler: {fileID: 811215140451431516}
+  movementDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &811215140451431516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4423710024287696707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5caa117e25b3c4b97b363d2656782d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InputHandler
+  playerControls: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  actionMapName: Player
+  move: Move
+  look: Look
+  jump: Jump
+  walk: Walk
+  paused: Pause
 --- !u!1 &4519865200954149941
 GameObject:
   m_ObjectHideFlags: 0

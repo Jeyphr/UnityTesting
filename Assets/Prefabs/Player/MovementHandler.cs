@@ -50,9 +50,6 @@ public class MovementHandler : MonoBehaviour
         this.verticalLookSensitivity = vertLookSens;
         this.updateMovement = true;
         this.updateCamera = true;
-
-        // Logging
-        if (logMovementDetails) {onLogDetails?.Invoke("MovementHandler initialized.");}
     }
     #endregion
 

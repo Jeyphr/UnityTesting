@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Logger : MonoBehaviour
@@ -26,11 +27,13 @@ public class Logger : MonoBehaviour
     [SerializeField] public VitalityUIManager VitalityUIManager;
     [SerializeField] public InputHandler InputHandler;
     [SerializeField] public MovementHandler MovementHandler;
-
+    [SerializeField] public TokenItemiser TokenItemiser;
+    
     // ------------------------------------------------------
     // Private Variables
     private int logCount = 1;
     #endregion
+
 
 
     // ------------------------------------------------------
@@ -43,7 +46,6 @@ public class Logger : MonoBehaviour
     }   
     #endregion
 
-
     // ------------------------------------------------------
     #region Delegates and Events
     void OnEnable()
@@ -53,15 +55,18 @@ public class Logger : MonoBehaviour
 
         if (Vitality == null) { Debug.LogError("Vitality component is null in Logger"); return; }
         Vitality.onLogDetails += Log;
+
         if (VitalityUIManager == null) { Debug.LogError("VitalityUIManager component is null in Logger"); return; }
         VitalityUIManager.onLogDetails += Log;
+
         if (InputHandler == null) { Debug.LogError("InputHandler component is null in Logger"); return; }
         InputHandler.onLogDetails += Log;
+
         if (MovementHandler == null) { Debug.LogError("MovementHandler component is null in Logger"); return; }
         MovementHandler.onLogDetails += Log;
-        
-        
-        
+
+        if (TokenItemiser == null) { Debug.LogError("TokenItemiser component is null in Logger"); return; }
+        TokenItemiser.onLogDetails += Log;
     }
     #endregion
 

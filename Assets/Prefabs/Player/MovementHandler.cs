@@ -59,10 +59,11 @@ public class MovementHandler : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
+        UpdateJumping();
         UpdateMovement();
         UpdateCamera();
-        UpdateJumping();
         UpdateInteraction();
+        playerController.Move(movementDirection * Time.deltaTime);
     }
     public void Awake()
     {
@@ -84,7 +85,7 @@ public class MovementHandler : MonoBehaviour
         move = playerCamera.transform.TransformDirection(move);
         move.y = 0f;
         move.Normalize();
-        playerController.Move(move * movementSpeed * Time.deltaTime);
+        movementDirection = move;
     }
 
     public void UpdateCamera()
@@ -114,6 +115,7 @@ public class MovementHandler : MonoBehaviour
             if (inputHandler.IsJumping)
             {
                 movementDirection.y = jumpHeight;
+                playerController.Move(movementDirection * Time.deltaTime);
                 
                 // Logging
                 if (logMovementDetails) {onLogDetails?.Invoke("Player jumped.");}
@@ -124,7 +126,6 @@ public class MovementHandler : MonoBehaviour
             // Apply gravity when not grounded
             movementDirection.y -= gravity * Time.deltaTime;
         }
-        playerController.Move(movementDirection * Time.deltaTime);
     }
     public void UpdateInteraction()
     {
@@ -133,8 +134,15 @@ public class MovementHandler : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, interactionRange))
         {
-            if(logMovementDetails) {onLogDetails?.Invoke("Interacting with " + hit.collider.name); }
+            if (hit.collider.CompareTag("Interactable"))
+            {
+                // Perform interaction logic here
+                // For example, you can call a method on the interactable object
+                // or trigger an event to notify other systems.
+            }
 
+            // Logging
+            if(logMovementDetails) {onLogDetails?.Invoke("Interacting with " + hit.collider.name); }
         }
 
     }

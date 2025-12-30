@@ -39,10 +39,6 @@ public class InputHandler : MonoBehaviour
 
     #region Main Methods
     // Unity Methods
-    void Update()
-    {
-        
-    }
     void Awake()
     {
         if (logInputDetails)

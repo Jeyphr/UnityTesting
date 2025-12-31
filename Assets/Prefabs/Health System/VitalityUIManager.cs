@@ -6,18 +6,22 @@ using UnityEditor.VersionControl;
 
 public class VitalityUIManager : MonoBehaviour
 {
-    // ------------------------------------------------------
     #region Properties
+    [Header("Vitality UI Settings")]
+    [SerializeField] public bool logHealthUIChanges = false;
+
+    [Header("Object References")]
     [SerializeField] private Vitality vitality;
     [SerializeField] private Image barFill;
     [SerializeField] private Image background;
     [SerializeField] private TextMeshProUGUI label;
-    // ------------------------------------------------------
-    [SerializeField] public bool logHealthUIChanges = false;
     #endregion
 
-    // ------------------------------------------------------
+
+
     #region Methods
+    // ----------------------------------------------------------
+    // Update the health bar UI based on current health
     private void UpdateHealthBar(int currentHealth, int maxHealth)
     {
         if (barFill == null) { Debug.LogError("BarFill image is null in VitalityUIManager"); return;}
@@ -36,6 +40,7 @@ public class VitalityUIManager : MonoBehaviour
         barFill.fillAmount = fillAmount;
     }
 
+    // ----------------------------------------------------------
     // bloody background effect gets more transparent as health decreases
     private void UpdateBackground(int currentHealth, int maxHealth)
     {
@@ -51,8 +56,16 @@ public class VitalityUIManager : MonoBehaviour
     }
     #endregion
 
-    // ------------------------------------------------------
+
+
     #region Enable / Disable
+    // ----------------------------------------------------------
+    // Logging event
+    public delegate void LogDetails(string details);
+    public event LogDetails onLogDetails;
+
+    // ----------------------------------------------------------
+    // Subscribe and unsubscribe to vitality events
     void OnEnable()
     {
         if (vitality == null) { Debug.LogError("Vitality component is null in VitalityUIManager"); return; }
@@ -65,9 +78,6 @@ public class VitalityUIManager : MonoBehaviour
         if (vitality == null) { return; }
         vitality.onHealthChanged -= UpdateHealthBar;
     }
-    // --------------------------------------
-    public delegate void LogDetails(string details);
-    public event LogDetails onLogDetails;
-    // ------------------------------------------------------
+
     #endregion
 }

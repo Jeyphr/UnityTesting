@@ -4,19 +4,21 @@ using UnityEngine;
 public class Vitality : MonoBehaviour
 {
     #region Properties
+    [Header("Vitality Settings")]
     [SerializeField] public int maxHealth = 100;
     [SerializeField] public int currentHealth = 100;
-
-    // ------------------------------------------------------
     [SerializeField] public bool isInvincible { get; set; }
     [SerializeField] public bool canSavingThrow { get; set; }
     [SerializeField] public bool logHealthChanges = false;
 
-    // ------------------------------------------------------
+
+
+    [Header("Object References")]
     [SerializeField] private GameObject go { get; set; }
     #endregion
 
-    // ------------------------------------------------------
+
+
     #region Constructors
     public Vitality(int maxHealth, bool isInvincible = false, bool canSavingThrow = false)
     {
@@ -30,8 +32,11 @@ public class Vitality : MonoBehaviour
     }
     #endregion
 
-    // ------------------------------------------------------
+
+
     #region Methods
+    // ----------------------------------------------------------
+    // Apply damage to the entity by x amount
     private void TakeDamage(int damage)
     {
         if (isInvincible || damage <= 0) return;                // No damage taken if invincible or damage is non-positive.
@@ -51,6 +56,8 @@ public class Vitality : MonoBehaviour
         if(logHealthChanges) {onLogDetails?.Invoke($"Took {damage} damage. Current Health: {currentHealth}/{maxHealth}");}
     }
 
+    // ----------------------------------------------------------
+    // Heal the entity by x amount
     private void Heal(int amount)
     {
         if (isInvincible || amount <= 0) return;                // No healing if invincible or amount is non-positive.
@@ -62,8 +69,9 @@ public class Vitality : MonoBehaviour
         // Logging
         if(logHealthChanges) {onLogDetails?.Invoke($"Healed {amount} health. Current Health: {currentHealth}/{maxHealth}");}
     }
-    #endregion
 
+    // ----------------------------------------------------------
+    // Handle entity death
     private void Die()
     {
         if (go == null) {return;}
@@ -74,16 +82,18 @@ public class Vitality : MonoBehaviour
         // Logging
         if(logHealthChanges) {onLogDetails?.Invoke($"{go.name} has died.");}
     }
+    #endregion
 
-    // ------------------------------------------------------
+
+
     #region Delegates & Events
+    // ----------------------------------------------------------
+    // Health changed and death events
     public delegate void OnHealthChanged(int currentHealth, int maxHealth);
     public event OnHealthChanged onHealthChanged;
     public delegate void OnDeath();
     public event OnDeath onDeath;
     public delegate void LogDetails(string details);
     public event LogDetails onLogDetails;
-
-    // ------------------------------------------------------
     #endregion
 }

@@ -9,12 +9,14 @@ public class TokenItemiser : MonoBehaviour
 
 
     #region Properties
+    [Header("Token Itemiser Settings")]
     [SerializeField] public bool enableLogging = false;
     #endregion
 
 
 
     #region Object References
+    [Header("Object References")]
     [SerializeField] private static TokenItemiser _instance;
     [SerializeField] private Logger logger;
     #endregion
@@ -61,25 +63,6 @@ public class TokenItemiser : MonoBehaviour
     }
 
     // --------------------------------------------------------------------------------------------------------
-    // Calculate the total value of all the tokens
-    public double countTokenValue(Token[] tokens)
-    {
-        double totalValue = 0.0;
-        foreach (Token token in tokens)
-        {
-            totalValue += token.GetValue();
-        }
-
-        //logging
-        if (enableLogging)
-        {
-            onLogDetails?.Invoke($"Total token value calculated: {totalValue}");
-        }
-
-        return totalValue;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
     // Get the token with the highest priority
     public Token getHighestPriorityToken(Token[] tokens)
     {
@@ -100,21 +83,6 @@ public class TokenItemiser : MonoBehaviour
         }
 
         return highestPriorityToken;
-    }
-
-    // --------------------------------------------------------------------------------------------------------
-    // Get the value of the token with the highest priority
-    public double getHighestPriorityTokenValue(Token[] tokens)
-    {
-        Token highestPriorityToken = getHighestPriorityToken(tokens);
-
-        //logging
-        if (enableLogging)
-        {
-            onLogDetails?.Invoke($"Highest priority token value retrieved: {highestPriorityToken.GetValue()}");
-        }
-
-        return highestPriorityToken != null ? highestPriorityToken.GetValue() : 0.0;
     }
 
     // --------------------------------------------------------------------------------------------------------

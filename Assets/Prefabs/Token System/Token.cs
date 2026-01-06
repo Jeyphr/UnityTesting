@@ -1,7 +1,19 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Tokens", menuName = "Tokens/New Token", order = 1)]
-public class Token : ScriptableObject
+/// <summary>
+/// Tokens represent discrete pieces of information within the game system.
+/// Each token has a name and a priority level that indicates its importance.
+/// Higher priority tokens should be processed or addressed before lower priority ones.
+/// 
+/// Tokens can be extended to represent specific types of data, such as Injury Tokens for injuries,
+/// which include additional properties like injury type, severity level, and affected limb.
+/// 
+/// Tokens are iterated and managed by the TokenItemiser singleton class, which provides functionality
+/// to sort and manipulate collections of tokens based on their properties, as well as 
+/// add and remove tokens from various systems.
+/// </summary>
+
+public class Token
 {
     #region Properties
     [Header("Token Properties")]

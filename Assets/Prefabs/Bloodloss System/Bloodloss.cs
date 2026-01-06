@@ -18,21 +18,37 @@ public class Bloodloss : MonoBehaviour
     #region Properties
     //----------------------------------------------------------
     [Header("Bloodloss Settings")]
-    [SerializeField] public bool enableLogging = false;
-    [SerializeField] public float totalBlood = 1000f; // Total blood volume
-    [SerializeField] public float currentBlood = 1000f; // Current blood volume
+    [SerializeField] public bool enableLogging;
+    [SerializeField] public float maxBlood = 1000f; // Maximum Blood volume
+    [SerializeField] public float currentBlood = 1000f; // Current Blood volume
 
     [Header("Object References")]
-    [SerializeField] private InjuryToken[] injuryTokens;
+    [SerializeField] public Ticker bloodlossTicker;
+    
+    // Private Fields
+    private InjuryToken[] injuryTokens = new InjuryToken[0];
+    private MovementHandler movementHandler;
     #endregion
 
 
 
     #region Unity Methods
     // ----------------------------------------------------------
+    private void Awake()
+    {
+        movementHandler = FindFirstObjectByType<MovementHandler>();
+    }
+
+    // ----------------------------------------------------------
     private void Start()
     {
+        bloodlossTicker.onTick += LoseBlood;
         
+        Ouch(new InjuryToken("Laceration", InjuryType.Cut, Limb.Arm, 8f, 0.3f));
+        Ouch(new InjuryToken("Puncture Wound", InjuryType.Puncture, Limb.Leg, 10f, 1.5f));
+        Ouch(new InjuryToken("Deep Cut", InjuryType.Cut, Limb.Leg, 6f, 2.0f));
+
+        bloodlossTicker.StartTicker();
     }
 
     // ----------------------------------------------------------
@@ -50,6 +66,10 @@ public class Bloodloss : MonoBehaviour
     private double CalculateBloodLossRate()
     {
         double totalLossRate = 0f;
+
+        //check to see if there are injury tokens
+        if (injuryTokens == null || injuryTokens.Length == 0) { return totalLossRate; }
+
         foreach (InjuryToken token in injuryTokens)
         {
             totalLossRate += (token.lossAmount * token.injuryLevel);
@@ -61,6 +81,64 @@ public class Bloodloss : MonoBehaviour
         }
 
         return totalLossRate;
+    }
+
+    // ----------------------------------------------------------
+    // Apply blood loss over time
+    private void LoseBlood()
+    {
+        double lossRate = CalculateBloodLossRate();
+        currentBlood -= (float)(lossRate * bloodlossTicker.tickInterval);
+        currentBlood = Mathf.Clamp(currentBlood, 0, maxBlood);
+
+        //current blood should be rounded to smallest whole number for readability
+        currentBlood = Mathf.Round(currentBlood);
+
+        if (enableLogging)
+        {
+            onLogDetails?.Invoke($"Blood Lost: {lossRate * bloodlossTicker.tickInterval} units. {currentBlood}/{maxBlood}");
+        }
+
+        if (currentBlood <= 0)
+        {
+            DieFromBloodLoss();
+        }
+    }
+
+    // ----------------------------------------------------------
+    // Death due to blood loss
+    private void DieFromBloodLoss()
+    {
+        // disable the ticker, stop movement, show death screen, etc.
+        bloodlossTicker.StopTicker();
+
+        // temp code will fix later
+        movementHandler.updateMovement = false;
+        movementHandler.updateCamera = false;
+
+
+        if (enableLogging)
+        {
+            onLogDetails?.Invoke("Player has died due to blood loss.");
+        }
+    }
+
+    // ----------------------------------------------------------
+    public void Ouch(InjuryToken injury)
+    {
+        Debug.Log($"Size of the array: {injuryTokens.Length}");
+
+        // Add the injury token to the list
+        System.Array.Resize(ref injuryTokens, injuryTokens.Length + 1);
+        injuryTokens[injuryTokens.Length - 1] = injury;
+
+        Debug.Log($"Size of the array: {injuryTokens.Length}");
+        
+
+        if (enableLogging)
+        {
+            onLogDetails?.Invoke($"Ouch! You just got a : {injury.tokenName}. Level: {injury.injuryLevel}, Loss Amount: {injury.lossAmount}");
+        }
     }
 
     #endregion

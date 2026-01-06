@@ -28,6 +28,8 @@ public class Logger : MonoBehaviour
     [SerializeField] public InputHandler InputHandler;
     [SerializeField] public MovementHandler MovementHandler;
     [SerializeField] public TokenItemiser TokenItemiser;
+    [SerializeField] public Ticker Ticker;
+    [SerializeField] public Bloodloss Bloodloss;
     
     // ------------------------------------------------------
     // Private Variables
@@ -67,6 +69,12 @@ public class Logger : MonoBehaviour
 
         if (TokenItemiser == null) { Debug.LogError("TokenItemiser component is null in Logger"); return; }
         TokenItemiser.onLogDetails += Log;
+
+        if (Ticker == null) { Debug.LogError("Ticker component is null in Logger"); return; }
+        Ticker.onLogDetails += Log;
+
+        if (Bloodloss == null) { Debug.LogError("Bloodloss component is null in Logger"); return; }
+        Bloodloss.onLogDetails += Log;
     }
     #endregion
 

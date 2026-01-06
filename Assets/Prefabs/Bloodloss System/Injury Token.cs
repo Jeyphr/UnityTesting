@@ -42,15 +42,39 @@ public enum Limb
 public class InjuryToken : Token
 {
     /// <summary>
-    /// Injustry Token representing a specific injury type and severity.
+    /// Injury Token representing a specific injury type and severity.
     /// </summary>
 
     #region Properties
+    // ----------------------------------------------------------
     [Header("Injury Token Settings")]
     public InjuryType injuryType { get; set; }
     public Limb affectedLimb { get; set; }
     public float injuryLevel { get; set; } // Severity level from 1 to 10
     public float lossAmount { get; set; }
     #endregion
+
+
+
+    #region Constructors
+    // ----------------------------------------------------------
+    public InjuryToken
+    (
+        string name,
+        InjuryType injuryType   = InjuryType.Cut, 
+        Limb affectedLimb       = Limb.Arm, 
+        float severity          = 1f, 
+        float lossAmount        = 0.5f) 
+
+        : base(name, (int)severity)
+    {
+        this.injuryType = injuryType;
+        this.affectedLimb = affectedLimb;
+        this.injuryLevel = severity;
+        this.lossAmount = lossAmount;
+        this.tokenName = name;
+    }
+    #endregion
     
 }
+

@@ -1,5 +1,18 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
+
+/// <summary>
+/// Singleton Logger class for managing and logging game events and states.
+/// This class provides a centralized way to log messages and maintain references
+/// to important game components.
+/// 
+/// There can be multiple of the same type of class that use the logger, but only one
+/// Logger instance should exist at any time.
+/// 
+/// If a class is null, the logger should not attempt to log anything about it, other than
+/// that it is null, but it should continue to log other classes that are not null.
+/// </summary>
 
 public class Logger : MonoBehaviour
 {
@@ -23,13 +36,17 @@ public class Logger : MonoBehaviour
     [SerializeField] public bool enableLogging = true;
 
     // Object References
-    [SerializeField] public Vitality Vitality;
+    [Header("Singleton Object References")]
     [SerializeField] public VitalityUIManager VitalityUIManager;
     [SerializeField] public InputHandler InputHandler;
     [SerializeField] public MovementHandler MovementHandler;
     [SerializeField] public TokenItemiser TokenItemiser;
-    [SerializeField] public Ticker Ticker;
-    [SerializeField] public Bloodloss Bloodloss;
+
+    [Header("--------------------------------")]
+    [Header("Non-Singleton Object References")]
+    [SerializeField] public Vitality[] classList;
+    [SerializeField] public Ticker[] Tickers;
+    [SerializeField] public Bloodloss[] BloodlossScripts;
     
     // ------------------------------------------------------
     // Private Variables
@@ -38,14 +55,59 @@ public class Logger : MonoBehaviour
 
 
 
-    // ------------------------------------------------------
     #region Methods
+    // ------------------------------------------------------
+    // Logging Method
     private void Log(string message)
     {
         if (!enableLogging) return;
         Debug.Log($"[Log #{logCount}]: {message}");
         logCount++;
-    }   
+    }
+
+    // ------------------------------------------------------
+    // find all objects of a given class in a scene
+    [System.Obsolete]
+    public T[] FindAllObjectsOfType<T>() where T : MonoBehaviour
+    {
+        return FindObjectsOfType<T>();
+    }
+
+    // ------------------------------------------------------
+    /// <summary>
+    /// There are going to be multiple of the same class that use the logger, but only one
+    /// Logger instance should exist at any time.
+    /// 
+    /// If a class is null, the logger should not attempt to log anything about it, other than
+    /// that it is null, but it should continue to log other classes that are not null
+    /// 
+    /// This method should find all instances of the same class and subscribe their "onLogDetails"
+    /// method to the logger's log event.
+    /// 
+    /// If the class is null, it should log that the class is null and continue.
+    /// </summary>
+    [System.Obsolete]
+    public void RegisterLoggers(Type classType)
+    {
+        if (!enableLogging) return;
+
+        // Vitality Loggers
+        
+        foreach (var classObject in classList)
+        {
+            if (classObject != null)
+            {
+                classObject.onLogDetails += Log;
+                Log($"Registered {classObject.GetType().Name} Logger for {classObject.gameObject.name}");
+            }
+            else
+            {
+                Log("Vitality instance is null, skipping registration.");
+            }
+        }
+    }
+
+
     #endregion
 
     // ------------------------------------------------------
@@ -55,28 +117,7 @@ public class Logger : MonoBehaviour
         if (!enableLogging) return;
         Log("Logger Enabled.");
 
-        if (Vitality == null) { Debug.LogError("Vitality component is null in Logger"); return; }
-        Vitality.onLogDetails += Log;
-
-        if (VitalityUIManager == null) { Debug.LogError("VitalityUIManager component is null in Logger"); return; }
-        VitalityUIManager.onLogDetails += Log;
-
-        if (InputHandler == null) { Debug.LogError("InputHandler component is null in Logger"); return; }
-        InputHandler.onLogDetails += Log;
-
-        if (MovementHandler == null) { Debug.LogError("MovementHandler component is null in Logger"); return; }
-        MovementHandler.onLogDetails += Log;
-
-        if (TokenItemiser == null) { Debug.LogError("TokenItemiser component is null in Logger"); return; }
-        TokenItemiser.onLogDetails += Log;
-
-        if (Ticker == null) { Debug.LogError("Ticker component is null in Logger"); return; }
-        Ticker.onLogDetails += Log;
-
-        if (Bloodloss == null) { Debug.LogError("Bloodloss component is null in Logger"); return; }
-        Bloodloss.onLogDetails += Log;
+        
     }
     #endregion
-
-
 }

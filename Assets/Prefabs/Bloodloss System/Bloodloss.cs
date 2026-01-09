@@ -36,7 +36,14 @@ public class Bloodloss : MonoBehaviour
     // ----------------------------------------------------------
     private void Awake()
     {
-        movementHandler = FindFirstObjectByType<MovementHandler>();
+        try
+        {
+            movementHandler = FindFirstObjectByType<MovementHandler>();
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"MovementHandler not found: {e.Message}");
+        }
     }
 
     // ----------------------------------------------------------
@@ -44,9 +51,9 @@ public class Bloodloss : MonoBehaviour
     {
         bloodlossTicker.onTick += LoseBlood;
         
-        Ouch(new InjuryToken("Laceration", InjuryType.Cut, Limb.Arm, 8f, 0.3f));
-        Ouch(new InjuryToken("Puncture Wound", InjuryType.Puncture, Limb.Leg, 10f, 1.5f));
-        Ouch(new InjuryToken("Deep Cut", InjuryType.Cut, Limb.Leg, 6f, 2.0f));
+        Ouch(new InjuryToken("Laceration", InjuryType.Cut, Limb.Arm, 8, 0.3f));
+        Ouch(new InjuryToken("Puncture Wound", InjuryType.Puncture, Limb.Leg, 10, 1.5f));
+        Ouch(new InjuryToken("Deep Cut", InjuryType.Cut, Limb.Leg, 6, 2.0f));
 
         bloodlossTicker.StartTicker();
     }

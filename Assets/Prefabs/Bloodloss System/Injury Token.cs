@@ -50,7 +50,7 @@ public class InjuryToken : Token
     [Header("Injury Token Settings")]
     public InjuryType injuryType { get; set; }
     public Limb affectedLimb { get; set; }
-    public float injuryLevel { get; set; } // Severity level from 1 to 10
+    public int injuryLevel { get; set; } // Severity level from 1 to 10
     public float lossAmount { get; set; }
     #endregion
 
@@ -63,16 +63,19 @@ public class InjuryToken : Token
         string name,
         InjuryType injuryType   = InjuryType.Cut, 
         Limb affectedLimb       = Limb.Arm, 
-        float severity          = 1f, 
+        int severity            = 1, 
         float lossAmount        = 0.5f) 
 
-        : base(name, (int)severity)
+        : base(name, severity)
     {
         this.injuryType = injuryType;
         this.affectedLimb = affectedLimb;
-        this.injuryLevel = severity;
         this.lossAmount = lossAmount;
         this.tokenName = name;
+
+        // Ensure severity is within 1-10 range
+        Mathf.Clamp(severity, 1, 10);
+        this.injuryLevel = severity;
     }
     #endregion
     

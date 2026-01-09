@@ -18,7 +18,7 @@ public class TokenItemiser : MonoBehaviour
     #region Object References
     [Header("Object References")]
     [SerializeField] private static TokenItemiser _instance;
-    [SerializeField] private Logger logger;
+    [SerializeField] private ConsoleLogger logger;
     #endregion
 
 

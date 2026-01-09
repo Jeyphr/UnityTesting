@@ -9,10 +9,8 @@ using UnityEngine.Scripting;
 public class ObjectLogger : MonoBehaviour
 {
     #region Properties
-    [Header("Object Logger Settings")]
-    [SerializeField] public bool enableObjectLogging = true;
-
-    [Header("Object References")]
+    // ----------------------------------------------------------
+    // Object References
     private ConsoleLogger consoleLogger;
     #endregion
 

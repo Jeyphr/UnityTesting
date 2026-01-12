@@ -16,7 +16,8 @@ using UnityEngine;
 
 public class ConsoleLogger : MonoBehaviour
 {
-    //singleton instance
+    // ------------------------------------------------------
+    // Singleton Instance
     private static ConsoleLogger _instance;
     public static ConsoleLogger Instance
     {
@@ -24,15 +25,16 @@ public class ConsoleLogger : MonoBehaviour
         {
             if (_instance == null)
             {
-                GameObject loggerObject = new GameObject("ConsoleLogger");
-                _instance = loggerObject.AddComponent<ConsoleLogger>();
-                DontDestroyOnLoad(loggerObject);
+                _instance = FindFirstObjectByType<ConsoleLogger>();
+                if (_instance == null)
+                {
+                    GameObject loggerObject = new GameObject("ConsoleLogger");
+                    _instance = loggerObject.AddComponent<ConsoleLogger>();
+                }
             }
             return _instance;
         }
     }
-
-
 
     #region Properties
     // ------------------------------------------------------
@@ -40,33 +42,58 @@ public class ConsoleLogger : MonoBehaviour
     [SerializeField] public bool enableLogging = true;
 
     [Header("Object References")]
-    [SerializeField] private LogToken[] logTokens = new LogToken[0];
+    [SerializeField] private ObjectLogger[] oLoggers;
     
     // ------------------------------------------------------
     // Private Variables
+    private int logCount = 1;
+    #endregion
+
+
+
+    #region Unity Methods    
+    // ------------------------------------------------------
+    private void Start()
+    {
+        RegisterObjectLoggers();
+    }
     #endregion
 
 
 
     #region Methods
     // ------------------------------------------------------
-    // Add a new Log token to the array
-    public void AddLogToken(LogToken logToken)
+    // Log a message to the console
+    public void LogMessage(string message)
     {
-        Array.Resize(ref logTokens, logTokens.Length + 1);
-        logTokens[logTokens.Length - 1] = logToken;
+        if (!enableLogging) return;
+        Debug.Log($"[Log] #{logCount}: {message}");
+        logCount++;
     }
 
     // ------------------------------------------------------
-    // Log all tokens to the console
-    public void LogAllTokens()
+    // Register all ologgers in the scene
+    public void RegisterObjectLoggers()
     {
-        if (!enableLogging) return;
-        if (logTokens.Length == 0 || logTokens == null) return;
+        if (oLoggers.Length == 0 || oLoggers == null) Debug.LogWarning("No ObjectLoggers found to register.");
 
-        foreach (LogToken token in logTokens)
+        foreach (var oLogger in oLoggers)
         {
-            Debug.Log(token.ToString());
+            oLogger.onLogDetails += LogMessage;
+            LogMessage($"Registered {oLogger.gameObject.name}");
+        }
+    }
+
+    // ------------------------------------------------------
+    // Unregister all ologgers in the scene
+    public void UnregisterObjectLoggers()
+    {
+        if (oLoggers.Length == 0 || oLoggers == null) Debug.LogWarning("No ObjectLoggers found to unregister.");
+
+        foreach (var oLogger in oLoggers)
+        {
+            oLogger.onLogDetails -= LogMessage;
+            LogMessage($"Unregistered {oLogger.gameObject.name}");
         }
     }
     #endregion

@@ -59,12 +59,4 @@ public class Token
         return $"{tokenPriority} : {tokenName}\t";
     }
     #endregion
-
-
-
-    #region Events and Delegates
-    public delegate void LogDetails(string message);
-    public event LogDetails onLogDetails;
-
-    #endregion
 }

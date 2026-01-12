@@ -23,6 +23,7 @@ public class Bloodloss : MonoBehaviour
     [SerializeField] public float currentBlood = 1000f; // Current Blood volume
 
     [Header("Object References")]
+    [SerializeField] public ObjectLogger oLogger;
     [SerializeField] public Ticker bloodlossTicker;
     
     // Private Fields
@@ -55,6 +56,12 @@ public class Bloodloss : MonoBehaviour
         Ouch(new InjuryToken("Puncture Wound", InjuryType.Puncture, Limb.Leg, 10, 1.5f));
         Ouch(new InjuryToken("Deep Cut", InjuryType.Cut, Limb.Leg, 6, 2.0f));
 
+        // Logging
+        if (enableLogging)
+        {
+            oLogger.onLogDetails += (message) => Debug.Log($"[Bloodloss]: {message}");
+        }
+
         bloodlossTicker.StartTicker();
     }
 
@@ -82,9 +89,10 @@ public class Bloodloss : MonoBehaviour
             totalLossRate += (token.lossAmount * token.injuryLevel);
         }
 
+        // Logging
         if (enableLogging)
         {
-            onLogDetails?.Invoke($"Total Blood Loss Rate calculated: {totalLossRate} units/sec");
+            oLogger.onLogDetails += (message) => Debug.Log($"[Bloodloss]: Calculated total blood loss rate: {totalLossRate} units/sec");
         }
 
         return totalLossRate;
@@ -101,11 +109,6 @@ public class Bloodloss : MonoBehaviour
         //current blood should be rounded to smallest whole number for readability
         currentBlood = Mathf.Round(currentBlood);
 
-        if (enableLogging)
-        {
-            onLogDetails?.Invoke($"Blood Lost: {lossRate * bloodlossTicker.tickInterval} units. {currentBlood}/{maxBlood}");
-        }
-
         if (currentBlood <= 0)
         {
             DieFromBloodLoss();
@@ -119,54 +122,31 @@ public class Bloodloss : MonoBehaviour
         // disable the ticker, stop movement, show death screen, etc.
         bloodlossTicker.StopTicker();
 
+        // Logging
+        if (enableLogging)
+        {
+            oLogger.onLogDetails += (message) => Debug.Log($"[Bloodloss]: Player has died from blood loss.");
+        }
+
         // temp code will fix later
         movementHandler.updateMovement = false;
         movementHandler.updateCamera = false;
-
-
-        if (enableLogging)
-        {
-            onLogDetails?.Invoke("Player has died due to blood loss.");
-        }
     }
 
     // ----------------------------------------------------------
     public void Ouch(InjuryToken injury)
     {
-        Debug.Log($"Size of the array: {injuryTokens.Length}");
-
         // Add the injury token to the list
         System.Array.Resize(ref injuryTokens, injuryTokens.Length + 1);
         injuryTokens[injuryTokens.Length - 1] = injury;
 
-        Debug.Log($"Size of the array: {injuryTokens.Length}");
-        
-
+        // Logging
         if (enableLogging)
         {
-            onLogDetails?.Invoke($"Ouch! You just got a : {injury.tokenName}. Level: {injury.injuryLevel}, Loss Amount: {injury.lossAmount}");
+            
         }
-    }
-
-    #endregion
-
-
-
-    #region Delegates & Events
-    // ----------------------------------------------------------
-    // Logging event
-    public delegate void OnLogDetails(string details);
-    public event OnLogDetails onLogDetails;
-
-    // ----------------------------------------------------------
-    // Enable and Disable
-    private void OnEnable()
-    {
 
     }
-    private void OnDisable()
-    {
 
-    }
     #endregion
 }

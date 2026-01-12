@@ -11,25 +11,33 @@ public class ObjectLogger : MonoBehaviour
     #region Properties
     // ----------------------------------------------------------
     // Object References
-    private ConsoleLogger consoleLogger;
+    private ConsoleLogger clogger;
     #endregion
 
 
     #region Unity Methods
     // ----------------------------------------------------------
+    // Find the ConsoleLogger in the scene
     private void Awake()
     {
-        consoleLogger = FindFirstObjectByType<ConsoleLogger>();
+        clogger = FindFirstObjectByType<ConsoleLogger>();
     }
     #endregion
 
+
+
     #region Methods
     // ----------------------------------------------------------
+    // Push message to Console Logger
+    
+
     #endregion
 
 
 
     #region Events and Delegates
+    // ----------------------------------------------------------
+    // Delegate for logging details
     public delegate void LogDetails(string message);
     public event LogDetails onLogDetails;
     #endregion

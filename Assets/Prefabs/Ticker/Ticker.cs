@@ -1,11 +1,10 @@
 using UnityEngine;
 
+/// <summary>
+/// A simple ticker system that triggers events at regular intervals.
+/// </summary>
 public class Ticker : MonoBehaviour
 {
-    /// <summary>
-    /// A simple ticker system that triggers events at regular intervals.
-    /// </summary>
-    
     #region Properties
     [Header("Ticker Settings")]
     [SerializeField] public bool enableLogging;
@@ -15,7 +14,6 @@ public class Ticker : MonoBehaviour
 
     // ----------------------------------------------------------
     // private fields
-
     private int tickCount = 0;
     #endregion
 
@@ -29,16 +27,6 @@ public class Ticker : MonoBehaviour
         tickInterval = interval;
         enableLogging = logging;
         tickCount = 0;
-    }
-    #endregion
-
-
-
-    #region Unity Methods
-    // ----------------------------------------------------------
-    private void Start()
-    {
-        
     }
     #endregion
 

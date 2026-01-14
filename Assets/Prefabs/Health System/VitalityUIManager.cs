@@ -4,6 +4,9 @@ using TMPro;
 using System.Reflection.Emit;
 using UnityEditor.VersionControl;
 
+/// <summary>
+/// Manages the UI elements related to the Vitality (health) system.
+/// </summary>
 public class VitalityUIManager : MonoBehaviour
 {
     #region Properties

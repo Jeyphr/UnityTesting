@@ -1,6 +1,8 @@
 using UnityEngine;
 
-
+/// <summary>
+/// Simple health system.
+/// </summary>
 public class Vitality : MonoBehaviour
 {
     #region Properties
@@ -20,6 +22,8 @@ public class Vitality : MonoBehaviour
 
 
     #region Constructors
+    // ----------------------------------------------------------
+    // Constructor to initialize Vitality with max health and optional settings
     public Vitality(int maxHealth, bool isInvincible = false, bool canSavingThrow = false)
     {
         this.maxHealth = maxHealth;

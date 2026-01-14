@@ -1,16 +1,27 @@
 using UnityEngine;
 
+/// <summary>
+/// 
+/// </summary>
 public class GraphGenerator : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    #region Properties
+    [Header("Graph Generator Settings")]
+    public int numberOfNodes = 10;
 
-    // Update is called once per frame
-    void Update()
+    #endregion
+
+
+
+    #region Methods
+    // ----------------------------------------------------------
+    // Example method to generate a graph
+    public void GenerateGraph()
     {
-        
+        // Graph generation logic would go here
+        Debug.Log($"Generating graph with {numberOfNodes} nodes.");
     }
+    #endregion
+
+
 }

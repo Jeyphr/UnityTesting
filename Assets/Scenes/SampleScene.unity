@@ -1246,13 +1246,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1be9ac402420735439ae295160a564a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Map2D
-  mapx: 3
-  mapy: 3
-  cellSize: 1
+  mapSizeX: 100
+  mapSizeY: 100
+  gridOffset: 0.9
   roomCeilingHeight: 3
   roomFloorHeight: 0
   mapContainer: {fileID: 1275755710}
-  CellPrefab: {fileID: 1238174980673212949, guid: 61b3274410baec44e8dc92039b88fa09, type: 3}
+  cellPrefab: {fileID: 1238174980673212949, guid: 61b3274410baec44e8dc92039b88fa09, type: 3}
 --- !u!1 &517316899
 GameObject:
   m_ObjectHideFlags: 0

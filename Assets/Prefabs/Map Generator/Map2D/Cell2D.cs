@@ -61,6 +61,7 @@ public class Cell2D : MonoBehaviour
 
     #region Constructors
     // ----------------------------------------------------------
+    // Constructor to initialize Cell2D with position, floor height, and ceiling height
     public Cell2D(Vector2 position, float floorHeight, float ceilingHeight)
     {
         this.cellPosition = position;
@@ -74,6 +75,7 @@ public class Cell2D : MonoBehaviour
         this.southWall = cellWallType2D.None;
         this.eastWall = cellWallType2D.None;
         this.westWall = cellWallType2D.None;
+        cellID++;
     }
     #endregion
 
